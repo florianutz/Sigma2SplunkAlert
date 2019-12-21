@@ -33,14 +33,16 @@ def main(argv):
     if cmdargs.config:
         converter_config_path = cmdargs.config
     else:
-        converter_config_path = 'config/config.yml'
+        #converter_config_path = 'config/config.yml'
+        converter_config_path = os.path.join(os.path.dirname ( __file__ ), 'config/config.yml')
 
     # cmdargs Sigma Configuration
     if cmdargs.sigma_config:
         sigma_config_path = cmdargs.sigma_config
     else:
-        sigma_config_path = 'sigma_config/splunk-all.yml'
-        
+        #sigma_config_path = 'sigma_config/splunk-all.yml'
+        sigma_config_path =  os.path.join(os.path.dirname ( __file__ ), 'sigma_config/splunk-all.yml')
+
     # cmdargs template Configuration
     if cmdargs.template:
         template_path = cmdargs.template
@@ -79,18 +81,19 @@ def main(argv):
             detection_rule = UseCase(sigma_rule, sigma2splunkalertconfig, splunk_search)
             detection_rules.append(detection_rule)
 
-    
+
     # Use Jinja2 Templating for create configuration
     if cmdargs.template:
         file_loader = FileSystemLoader(os.path.dirname(template_path))
     else:
-        file_loader = FileSystemLoader('templates')
-        
+        #file_loader = FileSystemLoader('templates')
+        file_loader = FileSystemLoader(os.path.join( os.path.dirname ( __file__ ), 'templates' ))
+
     env = Environment(loader=file_loader)
     env.trim_blocks = True
     env.lstrip_blocks = True
     env.rstrip_blocks = True
-    
+
     if cmdargs.template:
         template = env.get_template(os.path.basename(template_path))
 
